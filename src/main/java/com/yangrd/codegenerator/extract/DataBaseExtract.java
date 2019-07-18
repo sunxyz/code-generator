@@ -11,12 +11,14 @@ import java.util.List;
 public interface DataBaseExtract {
 
     /**
+     * listTableInfo
      * @param tableSchema
      * @return
      */
     List<TableInfo> listTableInfo(String tableSchema);
 
     /**
+     * listColumnInfo
      * @param tableSchema
      * @param tableName
      * @return

@@ -1,8 +1,10 @@
 package com.yangrd.codegenerator.config;
 
-import com.yangrd.codegenerator.clazz.EntityClazz;
 import com.yangrd.codegenerator.clazz.EntityClazzHandler;
-import com.yangrd.codegenerator.clazz.support.*;
+import com.yangrd.codegenerator.clazz.support.ColumnCommentConverter;
+import com.yangrd.codegenerator.clazz.support.ColumnDataTypeMapper;
+import com.yangrd.codegenerator.clazz.support.EntityClazzHook;
+import com.yangrd.codegenerator.clazz.support.NameConverter;
 import com.yangrd.codegenerator.clazz.support.impl.*;
 import com.yangrd.codegenerator.extract.DataBaseExtract;
 import com.yangrd.codegenerator.extract.inner.JdbcDataBaseExtract;

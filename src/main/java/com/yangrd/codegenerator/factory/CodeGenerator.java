@@ -49,5 +49,14 @@ public class CodeGenerator {
 
         temp = cfg.getTemplate("/code-generator/repository.ftl");
         temp.process(entityClazz,out);
+
+        temp = cfg.getTemplate("/code-generator/service.ftl");
+        temp.process(entityClazz,out);
+
+        temp = cfg.getTemplate("/code-generator/serviceImpl.ftl");
+        temp.process(entityClazz,out);
+
+        temp = cfg.getTemplate("/code-generator/controller.ftl");
+        temp.process(entityClazz,out);
     }
 }

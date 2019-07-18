@@ -17,12 +17,12 @@ public class IdEntityClazzHook implements EntityClazzHook {
     @Override
     public void after(EntityClazz entityClazz) {
         List<EntityField> fields = entityClazz.getFields();
-        for(EntityField field:fields){
-            if("PRI".equals(field.getColumnInfo().getColumnKey())){
+        for (EntityField field : fields) {
+            if ("PRI".equals(field.getColumnInfo().getColumnKey())) {
                 String idName = field.getFieldName();
-                String  idType = field.getFieldType().getSimpleName();
-                entityClazz.putMeta("idName",idName);
-                entityClazz.putMeta("idType",idType);
+                String idType = field.getFieldType().getSimpleName();
+                entityClazz.putMeta("idName", idName);
+                entityClazz.putMeta("idType", idType);
             }
         }
     }

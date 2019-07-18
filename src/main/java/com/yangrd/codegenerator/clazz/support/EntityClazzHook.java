@@ -10,5 +10,9 @@ import com.yangrd.codegenerator.clazz.EntityClazz;
  */
 public interface EntityClazzHook {
 
+    /**
+     * 在完全生成之前
+     * @param entityClazz
+     */
     void after(EntityClazz entityClazz);
 }
