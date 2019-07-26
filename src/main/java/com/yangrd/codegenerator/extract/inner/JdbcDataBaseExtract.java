@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * JdbcDataBaseExtract
@@ -22,7 +23,14 @@ public class JdbcDataBaseExtract implements DataBaseExtract {
 
     private static final String QUERY_TABLE_INFO_SQL = "select * from information_schema.tables where table_schema= ? ";
 
+    private static final String QUERY_TABLE_INFO_SINGLETON_SQL = "select * from information_schema.tables where table_schema= ? and table_name = ?";
+
     private static final String QUERY_COLUMN_INFO_SQL = "select * from information_schema.columns where table_schema= ? and table_name = ?";
+
+    @Override
+    public Optional<TableInfo> findTableInfo(String tableSchema, String tableName) {
+        return Optional.ofNullable(jdbcTemplate.queryForObject(QUERY_TABLE_INFO_SINGLETON_SQL,  new BeanPropertyRowMapper<>(TableInfo.class), tableSchema, tableName));
+    }
 
     @Override
     public List<TableInfo> listTableInfo(String tableSchema) {

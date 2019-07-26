@@ -1,13 +1,13 @@
 package com.yangrd.codegenerator.clazz;
 
+import com.google.common.collect.Sets;
 import com.yangrd.codegenerator.clazz.support.*;
 import com.yangrd.codegenerator.extract.ColumnInfo;
 import com.yangrd.codegenerator.extract.DataBaseExtract;
 import com.yangrd.codegenerator.extract.TableInfo;
 import lombok.AllArgsConstructor;
 
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -30,8 +30,18 @@ public class EntityClazzHandler {
     private EntityClazzHook hook;
 
     public EntityClazz getEntityClazz(String tableSchema, String tableName) {
-        TableInfo tableInfo = dataBaseExtract.listTableInfo(tableSchema).stream().filter(tableInfo1 -> tableInfo1.getTableName().equals(tableName)).findFirst().orElseThrow(RuntimeException::new);
-        List<ColumnInfo> columnInfos = dataBaseExtract.listColumnInfo(tableSchema, tableName);
+        TableInfo tableInfo = dataBaseExtract.findTableInfo(tableSchema, tableName).orElseThrow(RuntimeException::new);
+        return fromTableInfo(tableSchema, tableInfo);
+    }
+
+    public List<EntityClazz> listEntityClazz(String tableSchema, String... tableNames){
+        HashSet<String> tableNameSet = Sets.newHashSet(tableNames);
+        List<TableInfo> tableInfos = dataBaseExtract.listTableInfo(tableSchema).stream().filter(tableInfo -> tableNameSet.contains(tableInfo.getTableName())).collect(Collectors.toList());
+        return tableInfos.stream().map(tableInfo->fromTableInfo(tableSchema,tableInfo)).collect(Collectors.toList());
+    }
+
+    private EntityClazz fromTableInfo(String tableSchema, TableInfo tableInfo){
+        List<ColumnInfo> columnInfos = dataBaseExtract.listColumnInfo(tableSchema, tableInfo.getTableName());
         List<EntityField> fields = columnInfos.stream().map(this::fromColumnInfo).collect(Collectors.toList());
         EntityClazz entityClazz = toEntityClazz(tableInfo, fields);
         hook.after(entityClazz);
@@ -39,18 +49,19 @@ public class EntityClazzHandler {
     }
 
     private EntityClazz toEntityClazz(TableInfo tableInfo, List<EntityField> entityFields) {
+        Map<String, Object> meta = new HashMap<>();
         return new EntityClazz(
                 tableInfo.getTableName(),
                 tableInfo.getTableComment(),
                 nameConverter.apply(tableInfo.getTableName()),
                 entityFields,
-                new HashMap<>()
+                meta
         );
     }
 
     private EntityField fromColumnInfo(ColumnInfo columnInfo) {
         FieldDescription fieldDescription = new FieldDescription();
-        if(columnCommentConverter.isSupport(columnInfo.getColumnComment())){
+        if (columnCommentConverter.isSupport(columnInfo.getColumnComment())) {
             fieldDescription = columnCommentConverter.converter(columnInfo.getColumnComment());
         }
         return new EntityField(

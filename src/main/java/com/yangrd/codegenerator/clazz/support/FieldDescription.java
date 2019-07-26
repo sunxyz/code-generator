@@ -13,8 +13,14 @@ import java.util.List;
 @Data
 public class FieldDescription {
 
+    /**
+     * 字段描述(字段名称)
+     */
     private String fieldDescription;
 
+    /**
+     * 字段kvs
+     */
     private List<FieldValue> fieldValues;
 
     @Data

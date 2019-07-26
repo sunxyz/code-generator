@@ -17,18 +17,36 @@ import java.util.List;
 @AllArgsConstructor
 public class EntityField {
 
+    /**
+     * 字段类型
+     */
     private Class<?> fieldType;
 
+    /**
+     * 字段名称
+     */
     private String fieldName;
 
+    /**
+     * 字段描述
+     */
     private String fieldDescription;
 
+    /**
+     * 字段 kvs
+     * @see com.yangrd.codegenerator.clazz.support.ColumnCommentConverter#isSupport(String)
+     * @see com.yangrd.codegenerator.clazz.support.ColumnCommentConverter#converter(String)
+     */
     private List<FieldDescription.FieldValue> fieldValues;
 
+    /**
+     * 数据库字段信息
+     */
     private ColumnInfo columnInfo;
 
     @Data
     public static class FieldValue {
+
         private String key;
 
         private String value;
